@@ -1,12 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Basket : MonoBehaviour
 {
+    [Header("Set Dynamically")]
+    
+    public TextMeshProUGUI scoreGT;
+
     // Start is called before the first frame update
     void Start()
     {
+        // Find a reference to the ScoreCounter GameObject
+        GameObject scoreGO = GameObject.Find("ScoreCounter"); // b
+        // Get the Text Component of that GameObject
+        scoreGT = scoreGO.GetComponent<TextMeshProUGUI>(); // c
+        // Set the starting number of points to 0
+        scoreGT.text = "0";
         
     }
 
@@ -31,6 +42,14 @@ public class Basket : MonoBehaviour
         if (collidedWith.tag == "Apple")
         {
             Destroy(collidedWith);
+            int score = int.Parse(scoreGT.text);
+            score += 100;
+            scoreGT.text = score.ToString();
+
+            if (score > HighScore.score)
+            {
+                HighScore.score = score;
+            }
         }
     }
 }
