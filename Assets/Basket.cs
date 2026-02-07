@@ -8,17 +8,17 @@ public class Basket : MonoBehaviour
     [Header("Set Dynamically")]
     
     public TextMeshProUGUI scoreGT;
+    public TextMeshProUGUI roundGT;
 
     // Start is called before the first frame update
     void Start()
     {
-        // Find a reference to the ScoreCounter GameObject
-        GameObject scoreGO = GameObject.Find("ScoreCounter"); // b
-        // Get the Text Component of that GameObject
-        scoreGT = scoreGO.GetComponent<TextMeshProUGUI>(); // c
-        // Set the starting number of points to 0
+        GameObject scoreGO = GameObject.Find("ScoreCounter");
+        GameObject roundGO = GameObject.Find("RoundDisplay");
+        scoreGT = scoreGO.GetComponent<TextMeshProUGUI>();
+        roundGT = roundGO.GetComponent<TextMeshProUGUI>();
         scoreGT.text = "0";
-        
+        roundGT.text = "Round " + HighScore.round.ToString();
     }
 
     // Update is called once per frame
@@ -42,14 +42,47 @@ public class Basket : MonoBehaviour
         if (collidedWith.tag == "Apple")
         {
             Destroy(collidedWith);
-            int score = int.Parse(scoreGT.text);
-            score += 100;
-            scoreGT.text = score.ToString();
-
-            if (score > HighScore.score)
+            //int score = int.Parse(scoreGT.text);
+            if (HighScore.score < 10000)
             {
-                HighScore.score = score;
+                HighScore.score += 100;
+            } else if (HighScore.score < 50000) 
+            {
+                HighScore.score += 50;
+            } else
+            {
+                HighScore.score += 10;
             }
+            
+            scoreGT.text = HighScore.score.ToString();
+
+            if (HighScore.score > HighScore.highScore)
+            {
+                HighScore.highScore = HighScore.score;
+            }
+
+            if ((HighScore.score % 1000) == 0)
+            {
+                HighScore.round++;
+                AppleTree.speed += 2f;
+            }
+            if ((HighScore.score < 10000) && (HighScore.score % 2000) == 0)
+            {
+                AppleTree.secondsBetweenAppleDrops -= 0.1f;
+            }
+            if ((HighScore.score < 10000) && ((HighScore.score % 5000) == 0))
+            {
+                AppleTree.chanceToChangeDirections *= 2f;
+            }
+
+            roundGT.text = "Round " + HighScore.round.ToString();
+        }
+
+        if (collidedWith.tag == "Bomb")
+        {
+            Destroy(this.gameObject);
+            ApplePicker apScript = Camera.main.GetComponent<ApplePicker>();
+            apScript.AppleDestroyed();
         }
     }
 }

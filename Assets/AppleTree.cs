@@ -8,17 +8,19 @@ public class AppleTree : MonoBehaviour
     // Prefab for instantiating apples
     public GameObject applePrefab;
 
+    public GameObject bombPrefab;
+
     // Speed at which the Apple Tree moves
-    public float speed = 1f;
+    static public float speed = 10f;
 
     // Distance where AppleTree turns around
     public float leftAndRightEdge = 10f;
 
     // Chance that the Apple tree will change directions
-    public float chanceToChangeDirections = 0.1f;
+    static public float chanceToChangeDirections = 0.01f;
 
     //rate at which apples will be instantiated
-    public float secondsBetweenAppleDrops = 1f;
+    static public float secondsBetweenAppleDrops = 1f;
     
     // Start is called before the first frame update
     void Start()
@@ -32,8 +34,15 @@ public class AppleTree : MonoBehaviour
         pos.x += 18;
         pos.y += 8;
         pos.z += 17;
-        GameObject apple = Instantiate<GameObject>(applePrefab);
-        apple.transform.position = pos;
+        if (Random.value > 0.1) {
+            GameObject apple = Instantiate<GameObject>(applePrefab);
+            apple.transform.position = pos;
+        } else
+        {
+            GameObject bomb = Instantiate<GameObject>(bombPrefab);
+            bomb.transform.position = pos;
+        }
+        
         Invoke("DropApple", secondsBetweenAppleDrops);
     }
 

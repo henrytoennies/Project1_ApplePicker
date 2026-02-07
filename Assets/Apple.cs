@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Apple : MonoBehaviour
@@ -18,9 +19,14 @@ public class Apple : MonoBehaviour
     {
         if (transform.position.y < bottomY)
         {
-            Destroy(this.gameObject);
-            ApplePicker apScript = Camera.main.GetComponent<ApplePicker>();
-            apScript.AppleDestroyed();
+            if (this.tag == "Apple") {
+                Destroy(this.gameObject);
+                ApplePicker apScript = Camera.main.GetComponent<ApplePicker>();
+                apScript.AppleDestroyed();
+            } else if (this.tag == "Bomb")
+            {
+                Destroy(this.gameObject);
+            }
         }
     }
 }

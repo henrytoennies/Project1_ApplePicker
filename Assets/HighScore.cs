@@ -5,16 +5,17 @@ using TMPro;
 
 public class HighScore : MonoBehaviour
 {
-    static public int score = 1000;
-
+    static public int highScore = 1000;
+    static public int round;
+    static public int score;
 
     void Awake()
     {
         if (PlayerPrefs.HasKey("HighScore"))
         {
-            score = PlayerPrefs.GetInt("HighScore");
+            highScore = PlayerPrefs.GetInt("HighScore");
         }
-        PlayerPrefs.SetInt("HighScore", score);
+        PlayerPrefs.SetInt("HighScore", highScore);
     }
 
     // Start is called before the first frame update
@@ -27,11 +28,13 @@ public class HighScore : MonoBehaviour
     void Update()
     {
         TextMeshProUGUI gt = this.GetComponent<TextMeshProUGUI>();
-        gt.text = "High Score: " + score;
+        gt.text = "High Score: " + highScore;
 
-        if (score > PlayerPrefs.GetInt("Highscore"))
+        if (highScore > PlayerPrefs.GetInt("Highscore"))
         {
-            PlayerPrefs.SetInt("HighScore", score);
+            PlayerPrefs.SetInt("HighScore", highScore);
         }
+
+        
     }
 }
